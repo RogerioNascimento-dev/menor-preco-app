@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
       color:'#FFF',
       fontWeight:'bold'
     },
-
     containerBtnSocial:{},
     btnSocial:{
       flexDirection:'row',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View,Text,TouchableOpacity,Button } from 'react-native';
-
- import styles from './styles';
+import styles from './styles';
+import ListaPrincipal from '../../components/listPrincipal';
 
 
 
@@ -14,10 +14,7 @@ const Main = ({navigation}) => {
 
   return (
     <View style={styles.container}>    
-          <Text>Estou na página principal da aplicação lala</Text>
-          <TouchableOpacity onPress={()=> handleNavegar()}>
-              <Text>CRIAR LISTA</Text>
-            </TouchableOpacity>
+          <ListaPrincipal />
       </View>
   );
 }
