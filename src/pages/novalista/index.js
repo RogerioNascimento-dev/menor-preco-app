@@ -1,12 +1,48 @@
-import React from 'react';
-import { View,Text } from 'react-native';
-
- import styles from './styles';
+import React,{useState, useEffect} from 'react';
+import { Text, View, StyleSheet, Button } from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import ListaProdutosLidos from '../../components/listaProdutosLidos';
+import styles from './styles';
 
 const NovaLista = () => {
+
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
+
+  //Lendo a permissão do usuário para acessar a camera
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  //executa função se conseguir ler um código
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    alert(`Código de barras tipo ${type} número ${data} escanieado!`);
+  };
+
+  //informa que a permissão é necessária
+  if (hasPermission === null) {
+    return <Text>Solicitando permissão da câmera...</Text>;
+  }
+  if (hasPermission === false) {
+    return <Text>Permissão negada.</Text>;
+  }
+
   return (
       <View style={styles.container}>
-          <Text>Estou na página principal da aplicação</Text>
+        <BarCodeScanner
+        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        style={[StyleSheet.absoluteFillObject,styles.camera]}
+      />
+      <View style={styles.conteinerList}>         
+        <ListaProdutosLidos />
+      </View>
+      {scanned && (
+        <Button title={'Escanear outro produto'} onPress={() => setScanned(false)} />
+      )}      
       </View>
   );
 }
