@@ -1,10 +1,7 @@
-import {Dimensions} from 'react-native';
 import { StyleSheet } from 'react-native';
+import {widthScreemPercent,heightScreemPercent} from '../../commons/functions';
 
 
-
-const { width,height } = Dimensions.get('window');
-const heightConteinerList = height *  0.40
 
 const styles = StyleSheet.create({
     container: {
@@ -14,7 +11,7 @@ const styles = StyleSheet.create({
     },
     conteinerList:{
       backgroundColor:'#FFF',
-      height:heightConteinerList,
+      height:heightScreemPercent(0.4),
       padding: 5,
     }
   });
