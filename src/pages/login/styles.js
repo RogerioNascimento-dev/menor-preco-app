@@ -62,7 +62,9 @@ const styles = StyleSheet.create({
       color:'#FFF',
       fontWeight:'bold'
     },
-    containerBtnSocial:{},
+    containerBtnSocial:{
+      marginTop:5,
+    },
     btnSocial:{
       flexDirection:'row',
       width: widthScreemPercent(0.8),
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
       alignItems:'center',
       borderRadius: 5,   
       marginBottom: 5,
-      alignItems:'center',
+      justifyContent:'center'
       
     },
     btnSocialText:{

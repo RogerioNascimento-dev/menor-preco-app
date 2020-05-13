@@ -35,7 +35,6 @@ const ListaPrincipal = () => {
             renderItem={({item}) => {
                 return(
                     <View style={styles.itemListContent}>
-
                         <View style={styles.itemListTitleContent}>
                             <Text style={styles.itemListTitle}>{item.description}</Text>
                             <Text style={styles.itemListTitleRight}>{item.qtd} ítens</Text>

@@ -5,10 +5,38 @@ import { Sae } from 'react-native-textinput-effects';
 import { Entypo,MaterialCommunityIcons,AntDesign } from "@expo/vector-icons";
 import logo from '../../../assets/logo.png';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import * as Facebook from 'expo-facebook';
 
 const Login = ({navigation}) => {  
+  async function fbLogin() {
+    try {
+      await Facebook.initializeAsync('337610447219827');
+      const {
+        type,
+        token,
+        expires,
+        permissions,
+        declinedPermissions,
+      } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile','email'],
+      });
+      if (type === 'success') {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=first_name,last_name,email`);
+        const userFacebook = await response.json()    
+        console.log(userFacebook);     
+        navigation.navigate('Main')
+      } else {
+        // type === 'cancel'
+        alert('Login Cancelado pelo usuário')
+      }
+    } catch ({ message }) {
+      alert(`Algo inesperado aconteceu ao tentar efetuar este login com facebook: ${message}`);
+    }
+  }
+
   return (
-        <View style={styles.container}>                           
+        <View style={styles.container}>                                
           <Image          
             style={styles.imagemLogo}
             source={logo} />    
@@ -60,16 +88,17 @@ const Login = ({navigation}) => {
           </View> 
           
           <View style={styles.containerBtnSocial}>
-            <TouchableOpacity style={styles.btnSocial}>
+            <TouchableOpacity style={styles.btnSocial} onPress={fbLogin}>
               <AntDesign name="facebook-square" size={24} color="#FFF" />
               <Text style={styles.btnSocialText}>Entrar fom facebook</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.btnSocial}>
-              <AntDesign name="google" size={24} color="#FFF" />
-              <Text  style={styles.btnSocialText}>Entrar com google</Text>
+            <TouchableOpacity style={styles.btnSocial}>              
+              <Text  style={styles.btnSocialText}>Cadastre-se!</Text>
             </TouchableOpacity>
           </View>
+
+          
         </View>
   );
 }

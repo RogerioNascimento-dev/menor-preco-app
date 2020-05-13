@@ -1,11 +1,10 @@
 {
   "expo": {
     "name": "menorprecoapp",
-    "slug": "menorprecoapp",
+    "slug": "menor-preco-app",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +21,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nascimentt.menorprecoapp",
+      "buildNumber": "1.0.0"
+    },    
+    "android": {
+      "package": "com.nascimentt.menorprecoapp",
+      "versionCode": 1
+    },
+    "description": ""
   }
 }
