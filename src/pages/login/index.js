@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { View,Text,TextInput,Image, Button } from 'react-native';
 import styles from './styles';
 import { Sae } from 'react-native-textinput-effects';
@@ -7,7 +8,19 @@ import logo from '../../../assets/logo.png';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Facebook from 'expo-facebook';
 
+
+import {signInRequest} from '../../store/modules/auth/actions';
+
 const Login = ({navigation}) => {  
+
+  const dispatch = useDispatch();
+
+
+  function handleSubmit(){    
+    dispatch(signInRequest('rogerionascimento.dev@outlook.com.br','101010'));
+  }
+
+  console.tron.log('Olá mundo console');
   async function fbLogin() {
     try {
       await Facebook.initializeAsync('337610447219827');
@@ -76,7 +89,7 @@ const Login = ({navigation}) => {
               <Text style={styles.btnForgetPassText}>Esqueci minha senha?</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.btnLogin} onPress={()=> (navigation.navigate('Main'))}>
+            <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit}>
                 <Text style={styles.btnLoginText}>Entrar</Text>
             </TouchableOpacity>
           </View>     
