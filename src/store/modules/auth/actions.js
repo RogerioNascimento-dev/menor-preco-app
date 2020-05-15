@@ -5,8 +5,7 @@ export function signInRequest(email, password){
     };
 }
 
-export function signInSuccess(token, user){
-    console.tron.log('DENTRO DO SUCCESS',token,user);
+export function signInSuccess(token, user){    
     return {
         type:'@auth/SIGN_IN_SUCCESS',
         payload: { token, user},
