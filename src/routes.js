@@ -3,7 +3,7 @@ import {Button,TouchableOpacity,Text} from 'react-native'
 import {createAppContainer,createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-import { FontAwesome, Entypo, Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Entypo } from "@expo/vector-icons";
 import colors from './commons/colors';
 
 //Importação dos componentes de tela
@@ -11,6 +11,8 @@ import Login from './pages/login';
 import Main from './pages/main';
 import NovaLista from './pages/novalista';
 import Products from './pages/products';
+import Account from './pages/account';
+
 
 
 const RouteStack = createStackNavigator({    
@@ -47,21 +49,31 @@ const RouteBottom = createBottomTabNavigator({
         navigationOptions:{
             tabBarIcon: <FontAwesome color={colors.light.principal} name="shopping-cart" size={24}  />
         }
+    },
+    Account:{
+        screen: Account,
+        navigationOptions:{
+            tabBarIcon: <FontAwesome color={colors.light.principal} name="user" size={24}  />
+        }
     }
 })
 
-const RouteSwitch = createSwitchNavigator(
-    {
-    Login:{
-        screen: Login,
-        navigationOptions:{
-            title: "Tela de Login"
+export default (isSigned = true) =>
+createAppContainer(
+    createSwitchNavigator(
+        {
+        Login:{
+            screen: Login,
+            navigationOptions:{
+                title: "Tela de Login"
+            }
+        },
+        Main:{
+            screen: createAppContainer(RouteBottom),        
         }
     },
-    Main:{
-        screen: createAppContainer(RouteBottom),        
-    }
-});
+    {initialRouteName: isSigned?'Main':'Login'})
+)
 
 
 //atribuindo botão no lado direito da barra de navegação
@@ -75,4 +87,3 @@ Main.navigationOptions =({navigation}) =>{
         )
     }
 }
-export default createAppContainer(RouteSwitch);

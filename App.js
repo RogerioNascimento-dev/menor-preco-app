@@ -10,15 +10,15 @@ import {store, persistor } from './src/store';
 
 
 import colors from './src/commons/colors';
-import Routes from './src/routes';
+import AppRoutes from './src/AppRoutes';
 
 export default function App() {
 
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <StatusBar barStyle="light-content" backgroundColor={colors.light.principal} />
-        <Routes />
+        <StatusBar barStyle="light-content" backgroundColor={colors.light.principal} />        
+        <AppRoutes />
       </PersistGate>
     </Provider>
   );

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React,{useState,useRef} from 'react';
+import { useDispatch,useSelector } from 'react-redux';
 import { View,Text,TextInput,Image, Button } from 'react-native';
 import styles from './styles';
 import { Sae } from 'react-native-textinput-effects';
@@ -8,19 +8,23 @@ import logo from '../../../assets/logo.png';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Facebook from 'expo-facebook';
 
-
 import {signInRequest} from '../../store/modules/auth/actions';
+
 
 const Login = ({navigation}) => {  
 
   const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const passwordRef =  useRef();
+  const loading = useSelector(state => state.auth.loading);
+ 
 
-
-  function handleSubmit(){    
-    dispatch(signInRequest('rogerionascimento.dev@outlook.com.br','101010'));
+  function handleSubmit(){        
+    dispatch(signInRequest(email, password));
   }
 
-  console.tron.log('Olá mundo console');
+  
   async function fbLogin() {
     try {
       await Facebook.initializeAsync('337610447219827');
@@ -64,8 +68,13 @@ const Login = ({navigation}) => {
                 labelStyle={{color:'#FFF'}}                 
                 borderHeight={1}                                    
                 autoCapitalize={'none'}
-                autoCorrect={false}                
+                autoCorrect={false}     
+                keyboardType="email-address"           
                 style={styles.fieldsLogin}
+                value={email}
+                onChangeText={setEmail}
+                returnKeyType="next"
+                onSubmitEditing={() => passwordRef.current.focus()}
           />
           <Sae
                 label={'Senha'}
@@ -80,6 +89,11 @@ const Login = ({navigation}) => {
                 autoCapitalize={'none'}
                 autoCorrect={false}                
                 style={styles.fieldsLogin}
+                value={password}
+                onChangeText={setPassword}
+                ref={passwordRef}
+                returnKeyType="send"
+                onSubmitEditing={handleSubmit}
           />
             </View>  
 
@@ -90,7 +104,7 @@ const Login = ({navigation}) => {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit}>
-                <Text style={styles.btnLoginText}>Entrar</Text>
+            <Text style={styles.btnLoginText}>{loading ? 'Carregando...': 'Entrar'}</Text>
             </TouchableOpacity>
           </View>     
           
