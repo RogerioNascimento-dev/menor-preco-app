@@ -9,8 +9,7 @@ export function* signIn({payload}){
         const response = yield call(api.post, 'sessions', { email, password });
         const { token, user } = response.data;
         
-        yield put(signInSuccess(token,user));
-        //adicionar aqui a rota de navegação
+        yield put(signInSuccess(token,user));        
         api.defaults.headers.Authorization = `Baerer ${token}`;
     }catch(err){
         Alert.alert('Oops','Usuário ou senha incorreto, verifique seus dados.')
