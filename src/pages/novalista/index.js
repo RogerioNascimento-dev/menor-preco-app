@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import ListaProdutosLidos from '../../components/listaProdutosLidos';
+import ProductList from '../../components/productList';
 import styles from './styles';
 
 const NovaLista = () => {
@@ -31,15 +31,18 @@ const NovaLista = () => {
     return <Text>Permissão negada.</Text>;
   }
 
+  const dadosLista = [
+    {id:22, description:'Feijão',brand:'Carioca',amount:'1kg', barcode:7898901621089, quantity:5},
+    {id:23, description:'Café',brand:'Marata',amount:'500g', barcode:2514414, quantity:5},
+    
+]
+
   return (
       <View style={styles.container}>
         <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={[StyleSheet.absoluteFillObject,styles.camera]}
-      />
-      <View style={styles.conteinerList}>         
-        <ListaProdutosLidos />
-      </View>
+      />     
       {scanned && (
         <Button title={'Escanear outro produto'} onPress={() => setScanned(false)} />
       )}      
