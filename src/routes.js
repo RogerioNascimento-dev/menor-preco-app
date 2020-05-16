@@ -11,6 +11,7 @@ import Login from './pages/login';
 import Main from './pages/main';
 import NovaLista from './pages/novalista';
 import Products from './pages/products';
+import AddProduct from './pages/products/add';
 import Account from './pages/account';
 
 
@@ -25,7 +26,30 @@ const RouteStack = createStackNavigator({
         navigationOptions:{
             title:'Escanear código de barras'
         }
-    }  
+    },    
+   
+},{
+    defaultNavigationOptions:{
+        headerStyle:{
+            backgroundColor:colors.light.principal
+        },
+        headerTintColor:'#FFF'
+    },
+});
+
+const RoutesProductsStack = createStackNavigator({    
+    Products:{
+        screen: Products,
+        navigationOptions:{
+            title:"Produtos",            
+        }
+    },
+    AddProduct:{
+        screen:AddProduct,
+        navigationOptions:{
+            title:'Escanear código de barras'
+        }
+    },    
    
 },{
     defaultNavigationOptions:{
@@ -45,8 +69,9 @@ const RouteBottom = createBottomTabNavigator({
         }
     },
     Products:{
-        screen: Products,
+        screen: createAppContainer(RoutesProductsStack),
         navigationOptions:{
+            title:'Produtos',
             tabBarIcon: <FontAwesome color={colors.light.principal} name="shopping-cart" size={24}  />
         }
     },

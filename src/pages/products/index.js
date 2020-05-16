@@ -1,17 +1,25 @@
-import React,{useEffect,useState} from 'react';
-import { View } from 'react-native';
+import React,{useEffect,useState,useRef} from 'react';
+import { View,Text, Button,StyleSheet } from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 import api from '../../services/api';
 import styles from './styles';
 
 import cores from '../../commons/colors';
 import ProductList from '../../components/productList';
 import ButtonsCard from '../../components/buttonsCard';
+import  {Modalize}  from 'react-native-modalize';
 
+const Products = ({navigation}) => { 
 
-const Products = () => { 
+ 
 
   const [products,setProducts] = useState([]);
   const [isFetching,setIsFetching] = useState(false);
+  const modalizeRef = useRef(null);
+
+  const onOpen = () => {    
+    modalizeRef.current?.open();
+  };
 
   async function loadProducts(){
     try{
@@ -21,18 +29,37 @@ const Products = () => {
       console.tron.log(err);
     }
   } 
-
+  
   useEffect(()=>{ 
     loadProducts();    
   },[]) 
-  
-  return (
+
+  function handdleAddProduct(){
+    navigation.navigate('AddProduct');
+  }
+ return (
     <>
-  <View style={styles.containerButtonsTop}>      
-    <ButtonsCard iconName='plus'  iconColor={cores.light.principal} iconSize={25} text="Novo Produto" />
+   <View style={styles.containerButtonsTop}>      
+    <ButtonsCard iconName='plus' onPress={handdleAddProduct}   iconColor={cores.light.principal} iconSize={25} text="Novo Produto" />
     <ButtonsCard iconName='plus' iconColor={cores.light.principal} iconSize={25}  text="Cadastrar preço"/>    
   </View>
-  <ProductList refreshing={isFetching} onRefreshList={loadProducts} data={products} />   
+  <ProductList refreshing={isFetching} onRefreshList={loadProducts} data={products} /> 
+  <Modalize
+    scrollViewProps={{ showsVerticalScrollIndicator: false }}
+    snapPoint={300}
+    HeaderComponent={
+      <View>
+        <Text>Header</Text>
+      </View>
+    }
+    ButtonsCard
+    withHandle={false}
+    ref={modalizeRef}
+  >    
+
+      
+  
+  </Modalize>  
   </>
 )};
 

@@ -4,9 +4,9 @@ import {AntDesign} from '@expo/vector-icons'
 
 import styles  from './styles';
 
-const ButtonsCard = ({iconName,iconSize,iconColor, text}) => {
+const ButtonsCard = ({onPress,iconName,iconSize,iconColor, text}) => {
   return (
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity onPress={() => onPress()} style={styles.container}>
           <View style={styles.iconStyle}>
             <AntDesign name={iconName} size={iconSize} color={iconColor} />
           </View>
