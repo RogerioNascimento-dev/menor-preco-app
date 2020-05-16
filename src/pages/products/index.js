@@ -7,20 +7,13 @@ import styles from './styles';
 import cores from '../../commons/colors';
 import ProductList from '../../components/productList';
 import ButtonsCard from '../../components/buttonsCard';
-import  {Modalize}  from 'react-native-modalize';
+
 
 const Products = ({navigation}) => { 
 
- 
-
   const [products,setProducts] = useState([]);
-  const [isFetching,setIsFetching] = useState(false);
-  const modalizeRef = useRef(null);
-
-  const onOpen = () => {    
-    modalizeRef.current?.open();
-  };
-
+  const [isFetching,setIsFetching] = useState(false);  
+ 
   async function loadProducts(){
     try{
       const response = await api.get('products');
@@ -38,29 +31,14 @@ const Products = ({navigation}) => {
     navigation.navigate('AddProduct');
   }
  return (
-    <>
+    <View style={{flex:1,backgroundColor:'#FFF'}}>
    <View style={styles.containerButtonsTop}>      
     <ButtonsCard iconName='plus' onPress={handdleAddProduct}   iconColor={cores.light.principal} iconSize={25} text="Novo Produto" />
     <ButtonsCard iconName='plus' iconColor={cores.light.principal} iconSize={25}  text="Cadastrar preço"/>    
   </View>
   <ProductList refreshing={isFetching} onRefreshList={loadProducts} data={products} /> 
-  <Modalize
-    scrollViewProps={{ showsVerticalScrollIndicator: false }}
-    snapPoint={300}
-    HeaderComponent={
-      <View>
-        <Text>Header</Text>
-      </View>
-    }
-    ButtonsCard
-    withHandle={false}
-    ref={modalizeRef}
-  >    
-
-      
   
-  </Modalize>  
-  </>
+  </View>
 )};
 
 export default Products;

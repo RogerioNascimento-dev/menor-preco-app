@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
       borderBottomWidth: 1,
       borderColor: '#F1F1F1',
       marginBottom:10,
+      backgroundColor:'#FFF'
     }
   });
 

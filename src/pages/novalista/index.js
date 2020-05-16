@@ -14,12 +14,11 @@ const NovaLista = ({navigation}) => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
-  }, []);
-  alert('ESTOU AQUI NOVA LISTA');
+  }, []);  
   //executa função se conseguir ler um código
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Código de barras tipo ${type} número ${data} escanieado!`);
+    alert(`Código de barras tipo ${type} número ${data} escaneado, implementar lógica!`);
   };
 
   //informa que a permissão é necessária
@@ -30,11 +29,11 @@ const NovaLista = ({navigation}) => {
     return <Text>Permissão negada.</Text>;
   }  
   return (
-      
+      <>
         <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={[StyleSheet.absoluteFillObject,styles.camera]}
-      >     
+      />     
       {scanned && (
         <Button title={'Escanear outro produto'} onPress={() => setScanned(false)} />
       )}  
@@ -46,7 +45,7 @@ const NovaLista = ({navigation}) => {
           <View style={styles.layerRight} />
         </View>
         <View style={styles.layerBottom} />
-      </BarCodeScanner>
+        </>
   );
 }
 
