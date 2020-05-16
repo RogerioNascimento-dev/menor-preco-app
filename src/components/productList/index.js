@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react';
 import { View,Text,FlatList,TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 import  styles  from './styles'; 
 const ProductList = ({data,refreshing,onRefreshList}) => {    
@@ -23,7 +24,8 @@ const ProductList = ({data,refreshing,onRefreshList}) => {
                     </View>
 
                     <View style={styles.itemListSubTitleContent}>
-                      <Text style={styles.itemListSubTitle}>Código de barras: {item.barcode}</Text>                     
+                      <MaterialCommunityIcons name="barcode-scan" size={20} color="black" />
+                      <Text style={styles.itemListSubTitle}>{item.barcode}</Text>                     
                     </View>           
 
                 </View>

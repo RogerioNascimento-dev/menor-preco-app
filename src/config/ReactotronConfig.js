@@ -5,6 +5,7 @@ import reactotronSaga from 'reactotron-redux-saga';
 if(__DEV__){
     const tron =  Reactotron
     .configure({ host:'10.0.2.2'})
+    //.configure({host:'menor-preco-api.herokuapp.com'})
     .use(reactotronRedux())
     .use(reactotronSaga())
     .connect();

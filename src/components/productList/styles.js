@@ -31,11 +31,13 @@ const styles = StyleSheet.create({
     },
     itemListSubTitleContent:{
         flexDirection:'row',
-        justifyContent: 'space-between', 
+        justifyContent: 'flex-start',        
+        alignItems: 'center',    
     },
     itemListSubTitle:{
+        marginLeft: 5,
         fontSize: 16,
-        color: '#343F4B',
+        color: '#343F4B',        
     },
     itemListSubTitleRight:{
         fontSize: 16,
