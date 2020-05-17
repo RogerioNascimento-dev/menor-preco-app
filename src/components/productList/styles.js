@@ -7,11 +7,12 @@ const heightConteinerList = height *  0.32;
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor:'#FFF',
-    },
+        flex: 1,
+        backgroundColor:'#FFF',        
+    },    
     list:{
-        
-    },
+        backgroundColor:'#FFF',        
+    },  
     itemListContent:{
         flex:1,
         flexDirection: 'column',        

@@ -1,5 +1,5 @@
 import React,{useEffect,useState,useRef} from 'react';
-import { View,Text, Button,StyleSheet } from 'react-native';
+import { View,Text, Button,StyleSheet,ScrollView } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import api from '../../services/api';
 import styles from './styles';
@@ -17,7 +17,7 @@ const Products = ({navigation}) => {
   async function loadProducts(){
     try{
       const response = await api.get('products');
-      setProducts(response.data);
+      setProducts(response.data);      
     }catch(err){
       console.tron.log(err);
     }
@@ -31,14 +31,14 @@ const Products = ({navigation}) => {
     navigation.navigate('AddProduct');
   }
  return (
-    <View style={{flex:1,backgroundColor:'#FFF'}}>
+   <>
    <View style={styles.containerButtonsTop}>      
     <ButtonsCard iconName='plus' onPress={handdleAddProduct}   iconColor={cores.light.principal} iconSize={25} text="Novo Produto" />
     <ButtonsCard iconName='plus' iconColor={cores.light.principal} iconSize={25}  text="Cadastrar preço"/>    
   </View>
   <ProductList refreshing={isFetching} onRefreshList={loadProducts} data={products} /> 
+  </>
   
-  </View>
 )};
 
 export default Products;

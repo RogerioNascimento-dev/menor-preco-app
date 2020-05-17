@@ -1,6 +1,6 @@
 import React,{useState,useRef} from 'react';
 import { useDispatch,useSelector } from 'react-redux';
-import { View,Text,TextInput,Image, Button } from 'react-native';
+import { View,Text,Image, ActivityIndicator,Alert } from 'react-native';
 import styles from './styles';
 import { Sae } from 'react-native-textinput-effects';
 import { Entypo,MaterialCommunityIcons,AntDesign } from "@expo/vector-icons";
@@ -8,21 +8,42 @@ import logo from '../../../assets/logo.png';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Facebook from 'expo-facebook';
 
-import {signInRequest} from '../../store/modules/auth/actions';
+import {signInRequest, signUpRequest} from '../../store/modules/auth/actions';
 
 
-const Login = ({navigation}) => {  
+const Login = ({navigation}) => { 
+  
+  const [email, setEmail]                                   = useState('');
+  const [name, setName]                                     = useState('');
+  const [password, setPassword]                             = useState('');
+  const [passwordConfirmation, setPasswordConfirmation]     = useState('');  
+  const [isRegister, setIsRegister]                         = useState(false);
 
-  const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const passwordRef =  useRef();
-  const loading = useSelector(state => state.auth.loading);
+
+  const passwordRef             =  useRef();
+  const nameRef                 =  useRef();
+  const emailRef                =  useRef();
+  const passwordConfirmationRef =  useRef();
+  const loading                 = useSelector(state => state.auth.loading);
+  const dispatch                = useDispatch();
  
 
-  function handleSubmit(){        
+  function handleSubmit(){    
+    
+  if(isRegister){    
+    if(name && email && password && passwordConfirmation){
+      if(password === passwordConfirmation){  
+        dispatch(signUpRequest(name,email,password, passwordConfirmation));
+      }else{
+        Alert.alert('Oops', 'As senhas informadas estão diferentes');
+      }
+    }else{
+      Alert.alert('Oops', 'Todos os campos são obrigatórios.');
+    }  
+  }else{
     dispatch(signInRequest(email, password));
   }
+}
 
   
   async function fbLogin() {
@@ -43,8 +64,7 @@ const Login = ({navigation}) => {
         const userFacebook = await response.json()    
         console.log(userFacebook);     
         navigation.navigate('Main')
-      } else {
-        // type === 'cancel'
+      } else {        
         alert('Login Cancelado pelo usuário')
       }
     } catch ({ message }) {
@@ -57,7 +77,28 @@ const Login = ({navigation}) => {
           <Image          
             style={styles.imagemLogo}
             source={logo} />    
-            <View style={styles.containerFields}>            
+            <View style={styles.containerFields}>  
+            {isRegister && 
+                <Sae                
+                label={'Nome'}
+                iconClass={AntDesign}
+                iconName={'user'}
+                iconColor={'#FFF'}
+                inputPadding={16}
+                labelHeight={24}   
+                labelStyle={{color:'#FFF'}}                 
+                borderHeight={1}                                    
+                autoCapitalize={'none'}
+                autoCorrect={false}     
+                keyboardType="email-address"           
+                style={styles.fieldsLogin}
+                value={name}
+                onChangeText={setName}
+                ref={nameRef}
+                returnKeyType="next"
+                onSubmitEditing={() => emailRef.current.focus()}
+              />
+            }          
             <Sae                
                 label={'E-mail'}
                 iconClass={Entypo}
@@ -73,9 +114,11 @@ const Login = ({navigation}) => {
                 style={styles.fieldsLogin}
                 value={email}
                 onChangeText={setEmail}
+                ref={emailRef}
                 returnKeyType="next"
                 onSubmitEditing={() => passwordRef.current.focus()}
           />
+          
           <Sae
                 label={'Senha'}
                 iconClass={MaterialCommunityIcons}
@@ -91,20 +134,43 @@ const Login = ({navigation}) => {
                 style={styles.fieldsLogin}
                 value={password}
                 onChangeText={setPassword}
-                ref={passwordRef}
-                returnKeyType="send"
-                onSubmitEditing={handleSubmit}
+                ref={passwordRef}                             
           />
-            </View>  
 
+
+          {isRegister &&
+            <Sae
+            label={'Confirmar Senha'}
+            iconClass={MaterialCommunityIcons}
+            iconName={'textbox-password'}
+            iconColor={'#FFF'}
+            inputPadding={16}
+            labelHeight={24}    
+            labelStyle={{color:'#FFF'}}                 
+            borderHeight={1}                    
+            secureTextEntry
+            autoCapitalize={'none'}
+            autoCorrect={false}                
+            style={styles.fieldsLogin}
+            value={passwordConfirmation}
+            onChangeText={setPasswordConfirmation}
+            ref={passwordConfirmationRef}
+            returnKeyType="send"
+            onSubmitEditing={handleSubmit}
+      />
+          }
+
+            </View>
 
           <View style={styles.containerFieldsTouch}>
+          {!isRegister ?
             <TouchableOpacity >
               <Text style={styles.btnForgetPassText}>Esqueci minha senha?</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>:<View />}
 
             <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit}>
-            <Text style={styles.btnLoginText}>{loading ? 'Carregando...': 'Entrar'}</Text>
+            {loading ? <ActivityIndicator size={20} color="#FFF" />:
+            <Text style={styles.btnLoginText}>{!isRegister ?'Entrar':'Cadastrar'}</Text>}
             </TouchableOpacity>
           </View>     
           
@@ -114,18 +180,19 @@ const Login = ({navigation}) => {
             <View style={styles.lineOr}></View>
           </View> 
           
+          
           <View style={styles.containerBtnSocial}>
+            {!isRegister && 
             <TouchableOpacity style={styles.btnSocial} onPress={fbLogin}>
               <AntDesign name="facebook-square" size={24} color="#FFF" />
               <Text style={styles.btnSocialText}>Entrar fom facebook</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.btnSocial}>              
-              <Text  style={styles.btnSocialText}>Cadastre-se!</Text>
-            </TouchableOpacity>
-          </View>
-
+            </TouchableOpacity> }
           
+
+            <TouchableOpacity style={styles.btnSocial} onPress={() => setIsRegister(!isRegister)}>              
+  <Text  style={styles.btnSocialText}>{isRegister ? 'Já possuo Conta!': 'Cadastre-se!'}</Text>
+            </TouchableOpacity>
+          </View>          
         </View>
   );
 }

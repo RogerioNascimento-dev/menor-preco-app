@@ -1,5 +1,5 @@
 import React,{useState, useEffect,useRef} from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator,Vibration } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from './styles';
 import { Modalize } from 'react-native-modalize';
@@ -12,12 +12,13 @@ import api from '../../../services/api';
 
 const AddProduct = ({navigation}) => {
 
-  const [hasPermission, setHasPermission]   = useState(null);
-  const [scanned, setScanned]               = useState(false);
-  const [barcodeScanned,setBarcodeScanned]  = useState('');
-  const [description,setDescription]        = useState('');
-  const [brand,setBrand]                    = useState('');
-  const [amount,setAmount]                  = useState('');
+  const [hasPermission, setHasPermission]     = useState(null);
+  const [scanned, setScanned]                 = useState(false);
+  const [barcodeScanned,setBarcodeScanned]    = useState('');
+  const [description,setDescription]          = useState('');
+  const [brand,setBrand]                      = useState('');
+  const [amount,setAmount]                    = useState('');
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   
   
   const modalizeRef       = useRef(null);
@@ -45,14 +46,24 @@ const AddProduct = ({navigation}) => {
   }, []);
 
   //executa função se conseguir ler um código
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    setBarcodeScanned(data)
-    openModal()    
+  const handleBarCodeScanned = async ({ type, data }) => {
+
+    console.log(type)
+      Vibration.vibrate();    
+      setScanned(true);      
+      const product = await api.get(`products/${data}`);      
+      if(product.data){
+        alert('produto já cadastrado');
+        setScanned(false);
+      }else{
+        setBarcodeScanned(data);
+        openModal(); 
+      }     
   };
 
   function handdleCloseModal(){
     setScanned(false);
+    setIsLoadingSubmit(false);
     setDescription('');
     setAmount('');
     setBrand('');
@@ -61,17 +72,19 @@ const AddProduct = ({navigation}) => {
 
   async function handleSubmit(){
     try{
-      const response = await api.post('products',{
+        setIsLoadingSubmit(true);
+        const response = await api.post('products',{
         barcode: barcodeScanned,
         description,
         brand,
         amount
       });
-      
+      setIsLoadingSubmit(false);
       handdleCloseModal();
       closeModal();
       alert('produto cadastrado com sucesso!');
     }catch(err){
+      setIsLoadingSubmit(false);
       alert('algo inesperado aconteceu.');
     }
   }
@@ -102,7 +115,7 @@ const AddProduct = ({navigation}) => {
       <Modalize
         scrollViewProps={{ showsVerticalScrollIndicator: false }}
         onClosed={() => handdleCloseModal()}
-        snapPoint={420}
+        snapPoint={435}        
         HeaderComponent={
           <HeaderModalize title="Dados do produto" />
         }   
@@ -192,7 +205,10 @@ const AddProduct = ({navigation}) => {
             onSubmitEditing={() => handleSubmit()}
         />  
           <TouchableOpacity style={styles.btnSubmit} onPress={() => handleSubmit()}>
-            <Text style={styles.btnSubmitText}>Cadastrar</Text>
+            {isLoadingSubmit ? 
+            <ActivityIndicator size={25} color="#FFF" />
+            : <Text style={styles.btnSubmitText}>Cadastrar</Text>
+            }
           </TouchableOpacity>
     </View>
   </Modalize>

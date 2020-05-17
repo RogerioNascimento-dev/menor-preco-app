@@ -11,8 +11,7 @@ const ProductList = ({data,refreshing,onRefreshList}) => {
             onRefresh={()=>onRefreshList()}
             style={styles.list}
             data={data}
-            keyExtractor={product => `${product.id}`}
-            disableVirtualization
+            keyExtractor={product => `${product.id}`}                        
             renderItem={({item}) => {
                 return(
                     <View style={styles.itemListContent}>
@@ -26,11 +25,8 @@ const ProductList = ({data,refreshing,onRefreshList}) => {
                     <View style={styles.itemListSubTitleContent}>
                       <MaterialCommunityIcons name="barcode-scan" size={20} color="black" />
                       <Text style={styles.itemListSubTitle}>{item.barcode}</Text>                     
-                    </View>           
-
+                    </View> 
                 </View>
-
-
                 )
             }}
             />                             

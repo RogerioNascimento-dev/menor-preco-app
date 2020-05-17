@@ -1,7 +1,7 @@
 import {Alert} from 'react-native';
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 import api from '../../../services/api';
-import { signInSuccess, signFailure } from './actions';
+import { signInSuccess, signFailure, signInRequest } from './actions';
 
 export function* signIn({payload}){
     try{
@@ -17,8 +17,26 @@ export function* signIn({payload}){
     }
 }
 
-export function setToken({ payload }){
-    console.tron.log('Executou o settoken', payload)
+export function* signUp({payload}){
+    console.tron.log(payload);
+    const {name,email,password,passwordConfirmation} = payload;
+    
+    try{
+        const response = yield call(api.post,'users',{
+            name,
+            email,
+            password,
+            password_confirmation: passwordConfirmation
+        })
+        yield put(signInRequest(email, password));
+    }catch(err){
+        console.tron.log(err)
+        Alert.alert('Oops','Verifique os dados informados e tente novamente.')
+        yield put(signFailure())  
+    }        
+}
+
+export function setToken({ payload }){    
     if(!payload) return;
     const { token } = payload.auth;
     if(token){        
@@ -29,5 +47,6 @@ export function setToken({ payload }){
 //escutando os types das actions e acionando a função
 export default all([    
     takeLatest('@auth/SIGN_IN_REQUEST',signIn),
+    takeLatest('@auth/SIGN_UP_REQUEST', signUp),
     takeLatest('persist/REHYDRATE',setToken)    
 ]); 
