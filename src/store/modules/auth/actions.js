@@ -5,6 +5,13 @@ export function signInRequest(email, password){
     };
 }
 
+export function signInFacebookRequest(name,email,password,passwordConfirmation){
+    return {
+        type: '@auth/SIGN_IN_FACEBOOK_REQUEST',
+        payload: {name, email, password} 
+    };
+}
+
 export function signUpRequest(name,email,password, passwordConfirmation){
     return{
         type: '@auth/SIGN_UP_REQUEST',

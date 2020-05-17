@@ -20,6 +20,11 @@ export default function auth(state = INITIAL_STATE, action){
                     draft.loading = true
         })
 
+        case '@auth/SIGN_IN_FACEBOOK_REQUEST':
+                return produce(state, draft =>{
+                    draft.loading = true
+        })        
+
         case '@auth/SIGN_IN_SUCCESS':                   
             return produce(state, draft => {
                 draft.token = action.payload.token.token;

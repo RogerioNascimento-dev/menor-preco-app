@@ -8,11 +8,11 @@ import logo from '../../../assets/logo.png';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Facebook from 'expo-facebook';
 
-import {signInRequest, signUpRequest} from '../../store/modules/auth/actions';
+import {signInRequest,signInFacebookRequest, signUpRequest} from '../../store/modules/auth/actions';
 
 
 const Login = ({navigation}) => { 
-  
+
   const [email, setEmail]                                   = useState('');
   const [name, setName]                                     = useState('');
   const [password, setPassword]                             = useState('');
@@ -62,10 +62,14 @@ const Login = ({navigation}) => {
         // Get the user's name using Facebook's Graph API
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=first_name,last_name,email`);
         const userFacebook = await response.json()    
-        console.log(userFacebook);     
-        navigation.navigate('Main')
+        console.tron.log(userFacebook);   
+        const nomeFacebook      = `${userFacebook.first_name} ${userFacebook.last_name}`;
+        const emailFacebook     = userFacebook.email 
+        const passwordFacebook  = userFacebook.id
+        dispatch(signInFacebookRequest(nomeFacebook,emailFacebook,passwordFacebook))
+        
       } else {        
-        alert('Login Cancelado pelo usuário')
+        Alert.alert('Oops','Login Cancelado pelo usuário.')
       }
     } catch ({ message }) {
       alert(`Algo inesperado aconteceu ao tentar efetuar este login com facebook: ${message}`);
